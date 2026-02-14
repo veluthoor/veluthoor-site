@@ -145,6 +145,60 @@ function formatDate(dateStr?: string) {
     .back-link:hover {
       color: var(--text);
     }
+
+    .post-subscribe {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-subscribe p {
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 0.75rem;
+      font-family: var(--font);
+    }
+
+    .post-subscribe-form {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .post-subscribe-form input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      height: 38px;
+      padding: 0 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      font-size: 0.9rem;
+      font-family: var(--font);
+      outline: none;
+      color: var(--text);
+    }
+
+    .post-subscribe-form input[type="email"]:focus {
+      border-color: var(--accent);
+    }
+
+    .post-subscribe-form button {
+      height: 38px;
+      padding: 0 1.25rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: var(--font);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .post-subscribe-form button:hover {
+      opacity: 0.88;
+    }
   </style>
 
   <a href="/" class="back-link">← All posts</a>
@@ -161,6 +215,14 @@ function formatDate(dateStr?: string) {
 
     <div class="post-content">
       <Content />
+    </div>
+
+    <div class="post-subscribe">
+      <p>If you enjoyed this, consider subscribing — I write about life, travel, running, and whatever else is on my mind.</p>
+      <form class="post-subscribe-form" action="https://api.follow.it/subscription-form/UW55STg3OG5VbmpKMWRNZVB3ajA5SjR4KzdDaUU2WEhHbldyOFRWczBMd2VUeHRFb2FWdmpRK2tVdVNjUGVoVkl6VW5vYjlnYU4ySUNZZlF6Z29zMytva05aZWRWVkdMbndHMFdJVGovME9vOVhpUkF6RDl4SHNiN0FHMFU4dmx8ZFFyNTM5UmVmQ2RWOTNSRnludC9iRTk5cWV3RTN1UVl3TFE2V0RkcXNwQT0=/8" method="post">
+        <input type="email" name="email" required placeholder="your@email.com" />
+        <button type="submit">Subscribe</button>
+      </form>
     </div>
   </article>
 </Layout>
