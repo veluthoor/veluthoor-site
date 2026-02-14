@@ -1,0 +1,10 @@
+---
+title: "Quarterly Reports"
+slug: "quaterly-report-q2-2023"
+date: "2023-08-11"
+status: "published"
+excerpt: ""
+feature_image: ""
+---
+
+<p>Just like stock exchanges mandate that companies file quarterly reports to their investors, I've recently decided to start writing quarterly reports to myself. I got the idea from <a href="https://aliabdaal.com/">Ali Abdaal</a> who's been writing his own quarterly reviews in his newsletters for some time. It's a great reflective exercise to track yourself and your progress. I spent around roughly 3 hours over a few days in completing the exercise. </p><p>Here's the format that Ali Abdaal recommends for the exercise. </p><ol><li>What were the top 3 big wins of the past 3 months and why?</li><li>What were the 3 biggest challenges, and what did you learn from them?</li><li>What are the top 3 aspirations for the coming 3 months? And what’s the biggest risk they might not happen? And what are you going to do to mitigate that risk?</li></ol><p>While I use this as a template, I try not to force myself to come up with three instances or stick to three if I find more things that I think I'd like to focus on more. I will try to keep these reviews as public as possible. However, I realise I may need to edit some parts of this to protect some personal information. </p><p>Finally, if it would be helpful for you to have a buddy to read your review, then I’d be delighted to read yours - you can send them to me at veluthoor@gmail.com :)</p><p><a href="__GHOST_URL__/personal-report-q2-2023-2/">Q2, 2023 - Quarterly Review</a></p><p><a href="https://veluthoor.ghost.io/ghost/#/editor/page/652296f2caa6ae000101636d" rel="noreferrer">Q3, 2023 - Quarterly Review</a></p><p><a href="__GHOST_URL__/personal-report-q4-2023/" rel="noreferrer">Q4, 2023 - Quarterly Review</a></p>

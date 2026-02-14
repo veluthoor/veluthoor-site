@@ -1,0 +1,10 @@
+---
+title: "About Me"
+slug: "about"
+date: "2023-07-23"
+status: "published"
+excerpt: "Hi! I'm Charu, thanks for checking out my website :) Here's a little bit about me"
+feature_image: ""
+---
+
+<p>I began this page when I was on a mission to travel across my home country - India (as much as I can). While everybody around me has always talked about moving abroad, I've always felt like I would be doing a disservice to my country by never exploring everything it has to offer. And having been born in such a vast and diverse country - that's a mighty task. This page started as a page to document my travel experiences over those 6 months. </p><p>Apart from travelling, I love playing Badminton and have recently being running a lot. I'm also a graduate from Ashoka University, which may also explain my interest in personal finance. For work, I currently am a product manager at a startup in Bangalore. </p><p>Other random things you may find me <em>blabbering, </em>(highlighting blabbering since I don't have any inherent knowledge about these topics I just find myself consuming a lot of content and talking about these things lately) about include but are not limited to: Marathons, Cubbon Park, cryptic pregnancies and <a href="https://en.wikipedia.org/wiki/I_Didn%27t_Know_I_Was_Pregnant">IDKIWP</a>, lactose intolerance and other food allergies, books, travelling, journaling, learning languages, startups and parenting. </p><p>You can also find my bucket list of things to do over <a href="/pages/bucket-list">here</a>.</p><p>Other Professional Info here: <a href="https://www.linkedin.com/in/veluthoor/">https://www.linkedin.com/in/veluthoor/</a></p><p>Would like to keep this mostly personal. </p><h3 id="get-in-touch">Get in Touch</h3><p>To keep up with my travel updates and other snippets from my life - It would really motivate me to keep up with this, if you subscribe :)</p><p>I'd also love to hear if you have any comments/thoughts/recommendations, etc. You can find me on Twitter @veluthoor or send me an email at veluthoor@gmail.com</p><p>Yeah, it helps to have a unique last name! Thanks to my mom :)</p>

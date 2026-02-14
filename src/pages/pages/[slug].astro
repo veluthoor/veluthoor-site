@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map(page => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+
+function formatDate(dateStr?: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout title={page.data.title} description={page.data.excerpt}>
+  <style>
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .page-content {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .page-content :global(h2) {
+      font-family: var(--font);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+    }
+
+    .page-content :global(h3) {
+      font-family: var(--font);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .page-content :global(p) { margin-bottom: 1.3rem; }
+
+    .page-content :global(ul),
+    .page-content :global(ol) {
+      padding-left: 1.5rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .page-content :global(li) { margin-bottom: 0.3rem; }
+
+    .page-content :global(blockquote) {
+      border-left: 3px solid var(--border);
+      padding-left: 1.25rem;
+      color: var(--muted);
+      margin: 1.5rem 0;
+      font-style: italic;
+    }
+
+    .page-content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+    }
+
+    .page-content :global(a) { color: var(--accent); }
+
+    .page-content :global(hr) {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .page-content :global(table) {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      font-family: var(--font);
+      margin-bottom: 1.3rem;
+    }
+
+    .page-content :global(th),
+    .page-content :global(td) {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-content :global(th) { font-weight: 600; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .back-link:hover { color: var(--text); }
+  </style>
+
+  <a href="/writing" class="back-link">← Writing</a>
+
+  <article>
+    <header class="page-header">
+      <h1>{page.data.title}</h1>
+      {page.data.date && <p class="page-meta">{formatDate(page.data.date)}</p>}
+    </header>
+
+    {page.data.feature_image && (
+      <img src={page.data.feature_image} alt={page.data.title} style="max-width:100%;border-radius:4px;margin-bottom:2rem;" />
+    )}
+
+    <div class="page-content">
+      <Content />
+    </div>
+  </article>
+</Layout>

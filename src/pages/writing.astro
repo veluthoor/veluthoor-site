@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const sections = [
+  {
+    title: 'Quarterly Reports',
+    items: [
+      { title: 'Personal Report: Q2 2023', slug: 'personal-report-q2-2023-2' },
+      { title: 'Personal Report: Q3 2023', slug: 'personal-report-q3-2023' },
+      { title: 'Personal Report: Q4 2023', slug: 'personal-report-q4-2023' },
+    ],
+  },
+  {
+    title: 'Annual Reports',
+    items: [
+      { title: '2022', slug: '2022' },
+      { title: '2023 Year End Review', slug: '2023-review' },
+      { title: '2024 Year End Review', slug: '2024-year-end-review' },
+    ],
+  },
+  {
+    title: 'Random Lists',
+    items: [
+      { title: 'Bucket List', slug: 'bucket-list' },
+      { title: 'States & UT Checklist', slug: 'states-ut-checklist' },
+      { title: 'Airlines List', slug: 'airlines-list' },
+      { title: 'Things to Do in Bangalore', slug: 'list-of-things-to-do-in-bangalore' },
+      { title: 'LDR Date Ideas', slug: 'list-of-ldr-date-ideas' },
+      { title: 'Must Try Things in Kozhikode — Food', slug: 'must-try-things-in-kozhikode-food-editon' },
+      { title: 'Asking People Above 50 for Advice', slug: 'asking-people-above-50-the-one-piece-of-advise-they-would-give-their-younger-self' },
+    ],
+  },
+  {
+    title: 'Other',
+    items: [
+      { title: 'What Makes for a Dream Job?', slug: 'what-makes-for-a-dream-job-2' },
+      { title: 'Races & Results', slug: 'races-results' },
+    ],
+  },
+];
+---
+
+<Layout title="Writing">
+  <style>
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .item-list {
+      list-style: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .item a {
+      display: block;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      font-size: 0.97rem;
+    }
+
+    .item a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+
+  <h1>Writing</h1>
+
+  {sections.map(section => (
+    <div class="section">
+      <p class="section-title">{section.title}</p>
+      <ul class="item-list">
+        {section.items.map(item => (
+          <li class="item">
+            <a href={`/pages/${item.slug}`}>{item.title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</Layout>

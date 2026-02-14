@@ -1,0 +1,166 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(dateStr?: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout title={post.data.title} description={post.data.excerpt}>
+  <style>
+    .post-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .post-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+
+    .post-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .post-content {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .post-content :global(h2) {
+      font-family: var(--font);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+    }
+
+    .post-content :global(h3) {
+      font-family: var(--font);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .post-content :global(p) {
+      margin-bottom: 1.3rem;
+    }
+
+    .post-content :global(ul),
+    .post-content :global(ol) {
+      padding-left: 1.5rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .post-content :global(li) {
+      margin-bottom: 0.3rem;
+    }
+
+    .post-content :global(blockquote) {
+      border-left: 3px solid var(--border);
+      padding-left: 1.25rem;
+      color: var(--muted);
+      margin: 1.5rem 0;
+      font-style: italic;
+    }
+
+    .post-content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+    }
+
+    .post-content :global(a) {
+      color: var(--accent);
+    }
+
+    .post-content :global(hr) {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .post-content :global(figure) {
+      margin: 1.5rem 0;
+    }
+
+    .post-content :global(figcaption) {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+      font-family: var(--font);
+      font-style: normal;
+    }
+
+    .post-content :global(iframe) {
+      max-width: 100%;
+    }
+
+    .post-content :global(table) {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      font-family: var(--font);
+      margin-bottom: 1.3rem;
+    }
+
+    .post-content :global(th),
+    .post-content :global(td) {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-content :global(th) {
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+    }
+  </style>
+
+  <a href="/" class="back-link">← All posts</a>
+
+  <article>
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <p class="post-meta">{formatDate(post.data.date)}</p>
+    </header>
+
+    {post.data.feature_image && (
+      <img src={post.data.feature_image} alt={post.data.title} style="max-width:100%;border-radius:4px;margin-bottom:2rem;" />
+    )}
+
+    <div class="post-content">
+      <Content />
+    </div>
+  </article>
+</Layout>

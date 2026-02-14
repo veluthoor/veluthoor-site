@@ -1,0 +1,10 @@
+---
+title: "Srinagar's Obsession with SUMOs"
+slug: "srinagars-obsession-with-sumos"
+date: "2023-09-29"
+status: "published"
+excerpt: ""
+feature_image: "https://images.unsplash.com/photo-1625865415981-4a3f296d4b50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDJ8fHRhdGElMjBzdW1vfGVufDB8fHx8MTcwODE2NzYwMXww&ixlib=rb-4.0.3&q=80&w=2000"
+---
+
+<p>As somebody who uses a tonne of public transport to get around, I did no different in Srinagar, the capital city of J&amp;K. However, unlike normal modes of transport - buses, trains, metro, even shared autos - Srinagar stands apart. Here the major source of public transport are Tata SUMOs. In fact they have "SUMO stands" in every corner of the city. Sumos became home to some of the nicest conversations I had in Kashmir. For the short rides, everybody becomes closely involved in each other lives as you sit in close proximity. (One SUMO at full capacity typically sits about 11 people including it's driver. </p><p>While I tried scouring the internet as to why this phenomenon exists, I couldn't find much. Hence, I'm trying to draw some of my own logical explanations for the same. I guess heavy duty vehicles like Tata SUMO are well suited for high altitude places and the rough terrains of places like Kashmir, that also experience extreme weather conditions. Traditional vehicles like Electric rikshaws and auto rikshaws may not be well suited for longer distances of travel - hence such modes of transport seem to be limited to the city limits ( &lt; 20 kms). In comparison, SUMOs connect people all across the Kashmir Valley. In fact, I took one from Kargil to Srinagar (~300 kms). </p><p>Think of them as a combination of a bus and a share auto. Like share auto's they may wait till their partially filled up, and like a bus they usually have designated routes and destinations they are headed to that are written on the front of the vehicle. </p><p></p>

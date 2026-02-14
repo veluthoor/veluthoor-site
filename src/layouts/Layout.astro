@@ -1,0 +1,113 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Charu Veluthoor', description = 'Personal blog by Charu Veluthoor' } = Astro.props;
+const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Veluthoor`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{siteTitle}</title>
+    <style is:global>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #fdf8f4;
+        --text: #1a1a1a;
+        --muted: #888;
+        --accent: #d4522a;
+        --accent-2: #3a7d8c;
+        --accent-3: #7a5c9e;
+        --border: #ece6de;
+        --max-w: 680px;
+        --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        --font-serif: Georgia, 'Times New Roman', serif;
+      }
+
+      html { font-size: 18px; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        line-height: 1.7;
+        padding: 0 1.5rem;
+        min-height: 100vh;
+      }
+
+      a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+      a:hover { color: var(--accent); }
+
+      nav {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 2rem 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav .site-name {
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: -0.01em;
+        color: var(--accent);
+      }
+
+      nav .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      nav .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+      }
+
+      nav .nav-links a:hover { color: var(--text); }
+
+      main {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 2.5rem 0 5rem;
+      }
+
+      footer {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 2rem 0;
+        border-top: 1px solid var(--border);
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="site-name">Charu Veluthoor</a>
+      <div class="nav-links">
+        <a href="/writing">Writing</a>
+        <a href="/about">About Me</a>
+      </div>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      veluthoor.com
+    </footer>
+  </body>
+</html>
