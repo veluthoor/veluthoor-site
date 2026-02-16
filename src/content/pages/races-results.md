@@ -94,7 +94,7 @@ feature_image: ""
     <td class="tg-0pky">Tata Mumbai Marathon</td>
     <td class="tg-0pky">42.2km</td>
     <td class="tg-0pky">04:42:32</td>
-    <td class="tg-0pky">Completion of ProCam Slam</td>
+    <td class="tg-0pky">Completion of ProCam Slam. Finished 4th in 18-24 age group</td>
   </tr>
   <tr>
     <td class="tg-0pky">11th January 2026</td>
