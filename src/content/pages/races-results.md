@@ -82,6 +82,12 @@ feature_image: ""
     <td class="tg-0pky">2:24:52</td>
     <td class="tg-0pky"></td>
   </tr>
+  <tr>
+    <td class="tg-0pky">19th January 2025</td>
+    <td class="tg-0pky">Tata Mumbai Marathon</td>
+    <td class="tg-0pky">42.2km</td>
+    <td class="tg-0pky">04:42:32</td>
+    <td class="tg-0pky"></td>
+  </tr>
 </tbody></table>
 <!--kg-card-end: html-->
-<p>Upcoming: </p><ol><li>Tata Mumbai Marathon (Jan 19th, 2025) </li></ol>
