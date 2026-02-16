@@ -76,6 +76,13 @@ feature_image: ""
     <td class="tg-0pky">8th place in 18-24 age category</td>
   </tr>
   <tr>
+    <td class="tg-0pky">1st December 2024</td>
+    <td class="tg-0pky">Thump: Celebrate Bengaluru</td>
+    <td class="tg-0pky">20 miles</td>
+    <td class="tg-0pky">4:03:30</td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
     <td class="tg-0pky">15th December 2024</td>
     <td class="tg-0pky">Tata Steel World 25k - Kolkata</td>
     <td class="tg-0pky">25km</td>
@@ -88,6 +95,13 @@ feature_image: ""
     <td class="tg-0pky">42.2km</td>
     <td class="tg-0pky">04:42:32</td>
     <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">11th January 2026</td>
+    <td class="tg-0pky">Ironman 5i50 Relay - Chennai</td>
+    <td class="tg-0pky">5km</td>
+    <td class="tg-0pky">33:00</td>
+    <td class="tg-0pky">2nd place in Mixed Relay</td>
   </tr>
 </tbody></table>
 <!--kg-card-end: html-->
