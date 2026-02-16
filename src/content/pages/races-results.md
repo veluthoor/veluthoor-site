@@ -75,6 +75,13 @@ feature_image: ""
     <td class="tg-0pky">02:02: 13</td>
     <td class="tg-0pky">8th place in 18-24 age category</td>
   </tr>
+  <tr>
+    <td class="tg-0pky">15th December 2024</td>
+    <td class="tg-0pky">Tata Steel World 25k - Kolkata</td>
+    <td class="tg-0pky">25km</td>
+    <td class="tg-0pky">2:24:52</td>
+    <td class="tg-0pky"></td>
+  </tr>
 </tbody></table>
 <!--kg-card-end: html-->
-<p>Upcoming: </p><ol><li>Tata Steel World 25k - Kolkata (Dec 15th, 2024)</li><li>Tata Mumbai Marathon (Jan 19th, 2025) </li></ol>
+<p>Upcoming: </p><ol><li>Tata Mumbai Marathon (Jan 19th, 2025) </li></ol>
