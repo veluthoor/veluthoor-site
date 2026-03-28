@@ -10,51 +10,190 @@ const { Content } = aboutPage ? await render(aboutPage) : { Content: null };
 
 <Layout title="About">
   <style>
+    .about-hero {
+      text-align: center;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 20%;
+      right: 20%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    .page-title {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .about-subtitle {
+      font-size: 1.3rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 3rem;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .image-card {
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      border: 5px solid var(--text);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+    }
+
+    .image-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+    }
+
+    .image-card:nth-child(1) { border-color: var(--primary); }
+    .image-card:nth-child(2) { border-color: var(--primary-dark); }
+    .image-card:nth-child(3) { border-color: var(--primary-light); }
+    .image-card:nth-child(4) { border-color: var(--accent); }
+
+    .image-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-caption {
+      padding: 1rem;
+      background: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
     .about-content {
+      max-width: var(--content-w);
+      margin: 0 auto;
       font-family: var(--font-serif);
-      font-size: 1rem;
+      font-size: 1.1rem;
       line-height: 1.8;
     }
 
     .about-content :global(h1),
     .about-content :global(h2) {
       font-family: var(--font);
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin: 2rem 0 0.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 3rem 0 1rem;
     }
 
-    .about-content :global(h1) { font-size: 1.5rem; }
-    .about-content :global(h2) { font-size: 1.2rem; }
+    .about-content :global(h1) { font-size: 2rem; }
+    .about-content :global(h2) {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
 
-    .about-content :global(p) { margin-bottom: 1.3rem; }
+    .about-content :global(p) { margin-bottom: 1.5rem; }
 
     .about-content :global(ul),
     .about-content :global(ol) {
       padding-left: 1.5rem;
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.5rem;
     }
 
-    .about-content :global(li) { margin-bottom: 0.3rem; }
+    .about-content :global(li) { margin-bottom: 0.5rem; }
 
-    .about-content :global(a) { color: var(--accent); }
+    .about-content :global(a) {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .about-content :global(a):hover {
+      color: var(--primary-dark);
+    }
 
     .about-content :global(img) {
       max-width: 100%;
-      border-radius: 4px;
-      margin: 1.5rem 0;
+      border-radius: 16px;
+      margin: 2rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    .page-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 2rem;
+    .fun-facts {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: white;
+      border-radius: 30px;
+      border: 5px solid var(--primary);
+      box-shadow: 0 6px 0 var(--primary-dark);
+    }
+
+    .fun-facts h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .fun-facts ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .fun-facts li {
+      padding: 0.75rem 0;
+      font-size: 1.05rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .fun-facts li:last-child {
+      border-bottom: none;
+    }
+
+    .fun-facts li::before {
+      content: '✨ ';
+      margin-right: 0.5rem;
     }
   </style>
 
-  <h1 class="page-title">About</h1>
-  <div class="about-content">
+  <div class="about-hero">
+    <h1 class="page-title gradient-text">About Me</h1>
+    <p class="about-subtitle">Life, adventures, and everything in between</p>
+  </div>
+
+  <div class="image-grid animate-on-scroll">
+    <div class="image-card">
+      <img src="/images/running.jpg" alt="Running" />
+      <div class="image-caption">Running adventures</div>
+    </div>
+    <div class="image-card">
+      <img src="/images/skandagiri.jpg" alt="Skandagiri" />
+      <div class="image-caption">Mountain climbs</div>
+    </div>
+    <div class="image-card">
+      <img src="/images/leh-food.jpeg" alt="Food" />
+      <div class="image-caption">Food explorations</div>
+    </div>
+    <div class="image-card">
+      <img src="/images/life-lately.png" alt="Life lately" />
+      <div class="image-caption">Life lately</div>
+    </div>
+  </div>
+
+  <div class="about-content animate-on-scroll">
     {Content ? <Content /> : <p>About page coming soon.</p>}
   </div>
 </Layout>

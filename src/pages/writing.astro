@@ -42,61 +42,98 @@ const sections = [
 
 <Layout title="Writing">
   <style>
+    .writing-hero {
+      text-align: center;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+    }
+
     h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 2.5rem;
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 3rem;
+    }
+
+    .sections-container {
+      max-width: var(--content-w);
+      margin: 0 auto;
     }
 
     .section {
-      margin-bottom: 2.5rem;
+      margin-bottom: 4rem;
     }
 
     .section-title {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
     }
 
     .item-list {
       list-style: none;
-      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
     .item {
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .item a {
       display: block;
-      padding: 0.75rem 0;
+      padding: 1.5rem;
       text-decoration: none;
-      font-size: 0.97rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      background: white;
+      border-radius: 24px;
+      transition: all 0.2s ease;
+      border: 5px solid var(--text);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.2);
     }
 
+    .item:nth-child(4n+1) a { border-color: var(--primary); }
+    .item:nth-child(4n+2) a { border-color: var(--primary-dark); }
+    .item:nth-child(4n+3) a { border-color: var(--primary-light); }
+    .item:nth-child(4n+4) a { border-color: var(--accent); }
+
     .item a:hover {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 3px;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.2);
     }
   </style>
 
-  <h1>Writing</h1>
+  <div class="writing-hero">
+    <h1 class="gradient-text">Writing</h1>
+    <p class="subtitle">Thoughts, reflections, and random musings</p>
+  </div>
 
-  {sections.map(section => (
-    <div class="section">
-      <p class="section-title">{section.title}</p>
-      <ul class="item-list">
-        {section.items.map(item => (
-          <li class="item">
-            <a href={`/pages/${item.slug}`}>{item.title}</a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  ))}
+  <div class="sections-container">
+    {sections.map(section => (
+      <div class="section animate-on-scroll">
+        <h2 class="section-title">{section.title}</h2>
+        <ul class="item-list">
+          {section.items.map(item => (
+            <li class="item">
+              <a href={`/pages/${item.slug}`}>{item.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
 </Layout>

@@ -27,275 +27,424 @@ function validImage(url?: string) {
 
 <Layout title="Charu Veluthoor">
   <style>
+    /* Hero Section */
+    .hero {
+      padding: 4rem 0 3rem;
+      margin-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(255, 0, 0, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 50% 80%, rgba(204, 0, 0, 0.12) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      z-index: -1;
+    }
+
     .intro {
-      padding: 2rem 1.75rem 2.25rem;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #fff5f0 0%, #f0f7fa 60%, #f5f0fb 100%);
-      border: 1px solid var(--border);
-      margin-bottom: 2.5rem;
+      max-width: var(--content-w);
+      margin: 0 auto;
+      text-align: left;
     }
 
     .intro-header {
       display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-bottom: 1rem;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
 
     .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
+      width: 160px;
+      height: 160px;
+      border-radius: 0;
       object-fit: cover;
       object-position: center top;
       flex-shrink: 0;
-      border: 2px solid var(--border);
+      border: 8px solid var(--black);
+      box-shadow: 8px 8px 0 var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    .avatar:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 12px 12px 0 var(--primary);
     }
 
     .intro h1 {
-      font-size: 1.6rem;
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin: 0 0 1rem 0;
+      text-transform: uppercase;
+    }
+
+    .intro .subtitle {
+      font-size: 1.5rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin: 0;
+      color: var(--black);
+      margin-bottom: 2rem;
+      line-height: 1.4;
+      text-transform: none;
     }
 
     .intro p {
-      font-size: 1rem;
-      color: #444;
-      line-height: 1.75;
-      max-width: 560px;
-      margin-bottom: 0.85rem;
+      font-size: 1.15rem;
+      color: var(--text);
+      line-height: 1.9;
+      margin-bottom: 1.25rem;
+      max-width: 65ch;
     }
 
-    .intro p:last-child { margin-bottom: 0; }
+    .intro p:last-of-type { margin-bottom: 0; }
 
     .intro a {
-      color: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
       text-decoration: underline;
+      text-decoration-thickness: 2px;
       text-underline-offset: 3px;
+      transition: all 0.2s ease;
+    }
+
+    .intro a:hover {
+      color: var(--primary-dark);
+      text-decoration-color: var(--primary-dark);
     }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
+      gap: 0.75rem;
+      margin-top: 2rem;
     }
 
     .tag {
-      font-size: 0.75rem;
-      font-weight: 500;
-      padding: 0.2rem 0.65rem;
-      border-radius: 99px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 3px solid var(--black);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .tag-coral   { background: #fde8e0; color: #b83f18; }
-    .tag-teal    { background: #ddf0f3; color: #1e6b7a; }
-    .tag-purple  { background: #ede6f7; color: #5a3d8c; }
-    .tag-green   { background: #e2f3e8; color: #2a7048; }
-    .tag-yellow  { background: #fdf3d8; color: #7a5c00; }
-    .tag-pink    { background: #fce8f0; color: #9c2a5a; }
-    .tag-slate   { background: #e6edf5; color: #2e4e72; }
+    .tag:hover {
+      transform: translate(-3px, -3px);
+    }
+
+    .tag-primary   {
+      background: var(--white);
+      color: var(--black);
+      box-shadow: 4px 4px 0 var(--primary);
+    }
+    .tag-primary:hover {
+      box-shadow: 6px 6px 0 var(--primary);
+    }
+
+    .tag-primary-dark {
+      background: var(--black);
+      color: var(--white);
+      box-shadow: 4px 4px 0 var(--primary);
+    }
+    .tag-primary-dark:hover {
+      box-shadow: 6px 6px 0 var(--primary);
+    }
+
+    .tag-primary-light {
+      background: var(--primary);
+      color: var(--black);
+      box-shadow: 4px 4px 0 var(--black);
+    }
+    .tag-primary-light:hover {
+      box-shadow: 6px 6px 0 var(--black);
+    }
+
+    .tag-accent {
+      background: var(--accent);
+      color: var(--black);
+      box-shadow: 4px 4px 0 var(--black);
+    }
+    .tag-accent:hover {
+      box-shadow: 6px 6px 0 var(--black);
+    }
 
     /* Posts section */
+    .posts-section {
+      max-width: var(--content-w);
+      margin: 0 auto;
+    }
+
     .posts-section h2 {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 2.5rem;
     }
 
     .post-list {
       list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
     }
 
     /* Posts WITH an image — card style */
     .post-item.has-image {
-      border-bottom: 1px solid var(--border);
-      padding: 0.75rem 0;
-    }
-
-    .post-item.has-image:first-of-type {
-      border-top: 1px solid var(--border);
+      position: relative;
     }
 
     .post-card-link {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
+      display: block;
       text-decoration: none;
       color: inherit;
+      height: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      background: white;
+      transition: all 0.2s ease;
+      border: 6px solid var(--black);
+    }
+
+    .post-card-link:hover {
+      transform: translate(-4px, -4px);
+    }
+
+    .post-card-link.accent-primary {
+      box-shadow: 6px 6px 0 var(--primary);
+    }
+    .post-card-link.accent-primary:hover {
+      box-shadow: 10px 10px 0 var(--primary);
+    }
+
+    .post-card-link.accent-primary-dark {
+      box-shadow: 6px 6px 0 var(--black);
+    }
+    .post-card-link.accent-primary-dark:hover {
+      box-shadow: 10px 10px 0 var(--black);
+    }
+
+    .post-card-link.accent-primary-light {
+      box-shadow: 6px 6px 0 var(--accent);
+    }
+    .post-card-link.accent-primary-light:hover {
+      box-shadow: 10px 10px 0 var(--accent);
+    }
+
+    .post-card-link.accent-accent {
+      box-shadow: 6px 6px 0 var(--accent);
+    }
+    .post-card-link.accent-accent:hover {
+      box-shadow: 10px 10px 0 var(--accent);
     }
 
     .post-thumb {
-      width: 64px;
-      height: 64px;
-      border-radius: 8px;
+      width: 100%;
+      height: 200px;
       object-fit: cover;
-      flex-shrink: 0;
-      background: var(--border);
+      background: var(--primary-light);
     }
 
     .post-card-body {
-      flex: 1;
-      min-width: 0;
+      padding: 1.5rem;
     }
 
     .post-card-title {
-      font-size: 0.97rem;
-      font-weight: 500;
-      line-height: 1.4;
-      margin-bottom: 0.2rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+      color: var(--text);
     }
 
     .post-card-date {
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       color: var(--muted);
+      font-weight: 600;
     }
 
-    .post-card-link:hover .post-card-title {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-
-    /* Posts WITHOUT an image — simple list style */
-    .post-item.no-image {
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--border);
+    /* Posts WITHOUT an image — colorful card style */
+    .post-item.no-image .post-card-link {
+      padding: 2rem;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-    }
-
-    .post-item.no-image:first-of-type {
-      border-top: 1px solid var(--border);
+      flex-direction: column;
+      justify-content: center;
+      min-height: 140px;
     }
 
     .post-title {
-      font-size: 0.97rem;
-      font-weight: 400;
-      text-decoration: none;
-      flex: 1;
-    }
-
-    .post-title:hover {
-      color: var(--accent);
-      text-decoration: underline;
-      text-underline-offset: 3px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
     }
 
     .post-date {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--muted);
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-weight: 500;
     }
 
-    /* Subscribe section */
+    /* Subscribe section - Brutalist */
     .subscribe-section {
-      margin-bottom: 2.5rem;
-      padding: 1.5rem 1.75rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #fdf3ee;
+      max-width: var(--content-w);
+      margin: 4rem auto;
+      padding: 3.5rem;
+      border-radius: 0;
+      background: var(--primary);
+      border: 8px solid var(--black);
+      box-shadow: 12px 12px 0 var(--black);
+      position: relative;
+    }
+
+    .subscribe-section::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      background: var(--primary);
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .subscribe-section h3 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--black);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
 
     .subscribe-section p {
-      font-size: 0.9rem;
-      color: #444;
-      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 2rem;
+      text-transform: none;
+      letter-spacing: 0;
+      line-height: 1.6;
     }
 
     .subscribe-form {
       display: flex;
-      gap: 0.5rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }
 
     .subscribe-form input[type="email"] {
       flex: 1;
-      min-width: 200px;
-      height: 38px;
-      padding: 0 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #fff;
-      font-size: 0.9rem;
+      min-width: 250px;
+      height: 64px;
+      padding: 0 1.5rem;
+      border: 4px solid var(--black);
+      border-radius: 0;
+      background: var(--white);
+      font-size: 1.1rem;
       font-family: var(--font);
+      font-weight: 600;
       outline: none;
-      color: var(--text);
+      color: var(--black);
+      transition: all 0.2s ease;
     }
 
     .subscribe-form input[type="email"]:focus {
-      border-color: var(--accent);
+      border-color: var(--black);
+      box-shadow: 0 0 0 2px var(--black);
+    }
+
+    .subscribe-form input[type="email"]::placeholder {
+      color: #666;
     }
 
     .subscribe-form button {
-      height: 38px;
-      padding: 0 1.25rem;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      height: 64px;
+      padding: 0 3.5rem;
+      background: var(--black);
+      color: var(--white);
+      border: 4px solid var(--black);
+      border-radius: 0;
+      font-size: 1.15rem;
       font-family: var(--font);
-      font-weight: 500;
+      font-weight: 900;
       cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      box-shadow: 6px 6px 0 var(--primary-dark);
     }
 
     .subscribe-form button:hover {
-      opacity: 0.88;
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 var(--primary-dark);
+    }
+
+    .subscribe-form button:active {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--primary-dark);
     }
   </style>
 
-  <section class="intro">
-    <div class="intro-header">
-      <img src="/avatar.jpg" alt="Charu Veluthoor" class="avatar" />
-      <h1>Hi, I'm Charu Veluthoor.</h1>
-    </div>
-    <p>
-      I'm a 23 year old figuring out life. I use this space to mostly jot down my random thoughts.
-      For the most part you can find me doing outdoorsy things and playing a lot of sport. I also
-      enjoy travel, reading, a bit of hosting and being very dramatic about things nobody really
-      cares about.
-    </p>
-    <p>More about me <a href="/about">here</a> :)</p>
-    <div class="tags">
-      <span class="tag tag-coral">travel</span>
-      <span class="tag tag-teal">running</span>
-      <span class="tag tag-yellow">food</span>
-      <span class="tag tag-green">life in bangalore</span>
-      <span class="tag tag-slate">personal finance</span>
-      <span class="tag tag-purple">books</span>
-      <span class="tag tag-pink">languages</span>
-      <span class="tag tag-green">vibe coding</span>
+  <section class="hero">
+    <div class="intro">
+      <div class="intro-header">
+        <img src="/avatar.jpg" alt="Charu Veluthoor" class="avatar" />
+        <div>
+          <h1 class="gradient-text">Hi, I'm Charu</h1>
+          <p class="subtitle">23, figuring it all out 🏃‍♀️</p>
+        </div>
+      </div>
+      <p>
+        I use this space to jot down my random thoughts. You'll mostly find me doing outdoorsy things and playing a lot of sport.
+        I also enjoy travel, reading, a bit of hosting and being <strong>very dramatic about things nobody really cares about</strong>.
+      </p>
+      <p>More about me <a href="/about">here</a> →</p>
+      <div class="tags">
+        <span class="tag tag-primary">travel ✈️</span>
+        <span class="tag tag-primary-dark">running 🏃‍♀️</span>
+        <span class="tag tag-primary-light">food 🍜</span>
+        <span class="tag tag-primary">life in bangalore 🌳</span>
+        <span class="tag tag-accent">personal finance 💰</span>
+        <span class="tag tag-primary-dark">books 📚</span>
+        <span class="tag tag-primary-light">languages 🗣️</span>
+        <span class="tag tag-primary">vibe coding 💻</span>
+      </div>
     </div>
   </section>
 
-  <section class="subscribe-section">
-    <p>Get new posts in your inbox — no spam, just writing.</p>
+  <section class="subscribe-section animate-on-scroll">
+    <h3>Join the Newsletter</h3>
+    <p>Would love to have you here! Get my posts straight to your inbox. It'd mean the world if you'd subscribe :)</p>
     <form class="subscribe-form" action="https://api.follow.it/subscription-form/UW55STg3OG5VbmpKMWRNZVB3ajA5SjR4KzdDaUU2WEhHbldyOFRWczBMd2VUeHRFb2FWdmpRK2tVdVNjUGVoVkl6VW5vYjlnYU4ySUNZZlF6Z29zMytva05aZWRWVkdMbndHMFdJVGovME9vOVhpUkF6RDl4SHNiN0FHMFU4dmx8ZFFyNTM5UmVmQ2RWOTNSRnludC9iRTk5cWV3RTN1UVl3TFE2V0RkcXNwQT0=/8" method="post">
-      <input type="email" name="email" required placeholder="your@email.com" />
-      <button type="submit">Subscribe</button>
+      <input type="email" name="email" required placeholder="you@example.com" />
+      <button type="submit">Subscribe Now</button>
     </form>
   </section>
 
-  <section class="posts-section">
-    <h2>All posts</h2>
+  <section class="posts-section animate-on-scroll">
+    <h2 class="gradient-text">All Posts</h2>
     <ul class="post-list">
-      {posts.map(post => {
+      {posts.map((post, index) => {
         const img = validImage(post.data.feature_image);
+        const colors = ['primary', 'primary-dark', 'primary-light', 'accent'];
+        const accentColor = colors[index % colors.length];
+
         return img ? (
           <li class="post-item has-image">
-            <a href={`/blog/${post.id}`} class="post-card-link">
+            <a href={`/blog/${post.id}`} class={`post-card-link accent-${accentColor}`}>
               <img src={img} alt={post.data.title} class="post-thumb" />
               <div class="post-card-body">
                 <div class="post-card-title">{post.data.title}</div>
@@ -305,8 +454,10 @@ function validImage(url?: string) {
           </li>
         ) : (
           <li class="post-item no-image">
-            <a href={`/blog/${post.id}`} class="post-title">{post.data.title}</a>
-            <span class="post-date">{formatDate(post.data.date)}</span>
+            <a href={`/blog/${post.id}`} class={`post-card-link accent-${accentColor}`}>
+              <div class="post-title">{post.data.title}</div>
+              <span class="post-date">{formatDate(post.data.date)}</span>
+            </a>
           </li>
         );
       })}

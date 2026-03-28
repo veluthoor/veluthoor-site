@@ -1,0 +1,90 @@
+---
+// Playful decorative SVG elements
+---
+
+<style>
+  .decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .shape {
+    position: absolute;
+    opacity: 0.4;
+  }
+
+  .shape-1 {
+    top: 10%;
+    right: 5%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .shape-2 {
+    top: 60%;
+    left: 3%;
+    animation: float 8s ease-in-out infinite 1s;
+  }
+
+  .shape-3 {
+    bottom: 20%;
+    right: 8%;
+    animation: float 7s ease-in-out infinite 2s;
+  }
+
+  .shape-4 {
+    top: 40%;
+    right: 15%;
+    animation: rotate 20s linear infinite;
+  }
+
+  .shape-5 {
+    bottom: 10%;
+    left: 10%;
+    animation: float 9s ease-in-out infinite 1.5s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<div class="decorations">
+  <!-- Squiggle 1 -->
+  <svg class="shape shape-1" width="80" height="80" viewBox="0 0 80 80" fill="none">
+    <path d="M10 40C20 20, 40 20, 50 40C60 60, 40 60, 30 40" stroke="#FF0000" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+
+  <!-- Star -->
+  <svg class="shape shape-2" width="60" height="60" viewBox="0 0 60 60" fill="none">
+    <path d="M30 5L35 25L55 30L35 35L30 55L25 35L5 30L25 25L30 5Z" fill="#FF4D4D"/>
+  </svg>
+
+  <!-- Circle with dots -->
+  <svg class="shape shape-3" width="70" height="70" viewBox="0 0 70 70" fill="none">
+    <circle cx="35" cy="35" r="25" stroke="#CC0000" stroke-width="3" stroke-dasharray="5 5"/>
+    <circle cx="35" cy="35" r="5" fill="#CC0000"/>
+  </svg>
+
+  <!-- Abstract shape -->
+  <svg class="shape shape-4" width="90" height="90" viewBox="0 0 90 90" fill="none">
+    <path d="M45 10C60 10, 70 20, 70 35C70 50, 60 60, 45 60C30 60, 20 50, 20 35C20 20, 30 10, 45 10Z" stroke="#FF0000" stroke-width="3" fill="none"/>
+    <circle cx="45" cy="35" r="8" fill="#FF4D4D" opacity="0.5"/>
+  </svg>
+
+  <!-- Triangle -->
+  <svg class="shape shape-5" width="50" height="50" viewBox="0 0 50 50" fill="none">
+    <path d="M25 5L45 40L5 40Z" stroke="#FFD600" stroke-width="3" fill="none" stroke-linejoin="round"/>
+  </svg>
+</div>

@@ -1,4 +1,6 @@
 ---
+import Decorations from '../components/Decorations.astro';
+
 interface Props {
   title?: string;
   description?: string;
@@ -14,7 +16,7 @@ const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Velu
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/avatar.jpg" type="image/jpeg" />
     <link rel="alternate" type="application/rss+xml" title="Charu Veluthoor" href="/rss.xml" />
     <meta name="follow.it-verification-code" content="lBcFX7aWH2ZUaZMxztPC"/>
     <title>{siteTitle}</title>
@@ -22,82 +24,171 @@ const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Velu
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
-        --bg: #fdf8f4;
-        --text: #1a1a1a;
-        --muted: #888;
-        --accent: #d4522a;
-        --accent-2: #3a7d8c;
-        --accent-3: #7a5c9e;
-        --border: #ece6de;
-        --max-w: 680px;
+        /* Brutalist Blood Red Palette 🔴 */
+        --primary: #FF0000;
+        --primary-light: #FF4D4D;
+        --primary-dark: #CC0000;
+        --accent: #FFD600;
+        --black: #000000;
+        --white: #FFFFFF;
+
+        /* Background & Text */
+        --bg: #FFF8F0;
+        --text: #000000;
+        --muted: #1a1a1a;
+        --border: #000000;
+
+        /* Layout */
+        --max-w: 1100px;
+        --content-w: 720px;
+
+        /* Fonts */
         --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
         --font-serif: Georgia, 'Times New Roman', serif;
+        --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
       }
 
-      html { font-size: 18px; }
+      html {
+        font-size: 18px;
+        scroll-behavior: smooth;
+      }
 
       body {
         background: var(--bg);
         color: var(--text);
         font-family: var(--font);
-        line-height: 1.7;
-        padding: 0 1.5rem;
+        line-height: 1.8;
+        padding: 0;
         min-height: 100vh;
+        overflow-x: hidden;
       }
 
-      a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-      a:hover { color: var(--accent); }
+      a {
+        color: inherit;
+        text-decoration: none;
+        position: relative;
+      }
 
+      a:hover {
+        color: var(--primary);
+      }
+
+      /* Navigation - Brutalist */
       nav {
         max-width: var(--max-w);
         margin: 0 auto;
-        padding: 2rem 0 1.5rem;
+        padding: 1.5rem 2rem;
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
-        border-bottom: 1px solid var(--border);
+        align-items: center;
+        background: var(--black);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 8px solid var(--white);
+        box-shadow: 0 8px 0 rgba(0,0,0,0.3);
       }
 
       nav .site-name {
-        font-size: 1rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 900;
         text-decoration: none;
-        letter-spacing: -0.01em;
-        color: var(--accent);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        color: var(--black);
+        padding: 0.75rem 2rem;
+        background: var(--white);
+        border-radius: 0;
+        border: none;
+        transition: all 0.2s ease;
+        box-shadow: 4px 4px 0 var(--primary);
+      }
+
+      nav .site-name:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--primary);
       }
 
       nav .nav-links {
         display: flex;
-        gap: 1.5rem;
-        font-size: 0.9rem;
-        color: var(--muted);
+        gap: 1rem;
+        font-size: 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
       }
 
       nav .nav-links a {
         text-decoration: none;
-        color: var(--muted);
+        color: var(--white);
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        border: 3px solid var(--white);
+        border-radius: 0;
+        transition: all 0.2s ease;
       }
 
-      nav .nav-links a:hover { color: var(--text); }
+      nav .nav-links a:hover {
+        background: var(--white);
+        color: var(--black);
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0 var(--primary);
+      }
 
       main {
         max-width: var(--max-w);
         margin: 0 auto;
-        padding: 2.5rem 0 5rem;
+        padding: 3rem 2rem 5rem;
       }
 
       footer {
         max-width: var(--max-w);
         margin: 0 auto;
-        padding: 2rem 0;
-        border-top: 1px solid var(--border);
-        font-size: 0.85rem;
-        color: var(--muted);
+        padding: 3rem 2rem;
+        border-top: 8px solid var(--black);
+        font-size: 1.1rem;
+        color: var(--black);
         text-align: center;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+      }
+
+      .animate-in {
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      /* Utility Classes - Brutalist */
+      .gradient-text {
+        color: var(--black);
+        text-shadow: 5px 5px 0 var(--primary);
+        font-weight: 900;
+        text-transform: uppercase;
       }
     </style>
   </head>
   <body>
+    <Decorations />
     <nav>
       <a href="/" class="site-name">Charu Veluthoor</a>
       <div class="nav-links">
@@ -109,7 +200,29 @@ const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Velu
       <slot />
     </main>
     <footer>
-      veluthoor.com
+      Made with ✨ and lots of ❤️ in Bangalore
     </footer>
+
+    <script>
+      // Scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        animatedElements.forEach(el => observer.observe(el));
+      });
+    </script>
   </body>
 </html>
