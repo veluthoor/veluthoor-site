@@ -167,6 +167,42 @@ const { Content } = aboutPage ? await render(aboutPage) : { Content: null };
       content: '✨ ';
       margin-right: 0.5rem;
     }
+
+    @media (max-width: 768px) {
+      .about-hero { padding: 1.5rem 0; margin-bottom: 2rem; }
+      .page-title { font-size: 2.5rem; }
+      .about-subtitle { font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+      .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+      .image-card {
+        border-width: 3px;
+        border-radius: 16px;
+      }
+      .image-card img { height: 160px; }
+      .image-caption { padding: 0.6rem; font-size: 0.8rem; }
+
+      .about-content { font-size: 1rem; line-height: 1.7; }
+      .about-content :global(h1) { font-size: 1.5rem; }
+      .about-content :global(h2) { font-size: 1.25rem; }
+
+      .fun-facts {
+        margin: 2rem 0;
+        padding: 1.25rem;
+        border-width: 3px;
+        border-radius: 20px;
+      }
+      .fun-facts h3 { font-size: 1.2rem; }
+      .fun-facts li { font-size: 0.95rem; padding: 0.6rem 0; }
+    }
+
+    @media (max-width: 420px) {
+      .image-grid { grid-template-columns: 1fr; }
+      .image-card img { height: 220px; }
+    }
   </style>
 
   <div class="about-hero">

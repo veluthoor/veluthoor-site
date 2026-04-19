@@ -396,6 +396,83 @@ function validImage(url?: string) {
       transform: translate(-1px, -1px);
       box-shadow: 4px 4px 0 var(--primary-dark);
     }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .hero { padding: 2rem 0 1.5rem; margin-bottom: 2rem; }
+
+      .intro-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-width: 5px;
+        box-shadow: 5px 5px 0 var(--primary);
+      }
+
+      .intro h1 { font-size: 2.25rem; }
+      .intro .subtitle { font-size: 1.1rem; margin-bottom: 1.5rem; }
+      .intro p { font-size: 1rem; line-height: 1.7; }
+
+      .tags { gap: 0.5rem; margin-top: 1.5rem; justify-content: center; }
+      .tag {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.85rem;
+        border-width: 2px;
+        box-shadow: 3px 3px 0 var(--primary) !important;
+      }
+      .tag-primary-light { box-shadow: 3px 3px 0 var(--black) !important; }
+      .tag-accent { box-shadow: 3px 3px 0 var(--black) !important; }
+      .tag:hover { transform: none; }
+
+      .posts-section h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
+      .post-list {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+      .post-card-link { border-width: 4px; }
+      .post-card-link.accent-primary { box-shadow: 4px 4px 0 var(--primary); }
+      .post-card-link.accent-primary-dark { box-shadow: 4px 4px 0 var(--black); }
+      .post-card-link.accent-primary-light { box-shadow: 4px 4px 0 var(--accent); }
+      .post-card-link.accent-accent { box-shadow: 4px 4px 0 var(--accent); }
+      .post-card-link:hover { transform: none; }
+      .post-thumb { height: 180px; }
+      .post-card-body { padding: 1rem; }
+
+      .subscribe-section {
+        margin: 2.5rem auto;
+        padding: 1.75rem 1.25rem;
+        border-width: 4px;
+        box-shadow: 6px 6px 0 var(--black);
+      }
+      .subscribe-section h3 { font-size: 1.4rem; }
+      .subscribe-section p { font-size: 1rem; margin-bottom: 1.25rem; }
+
+      .subscribe-form { flex-direction: column; gap: 0.75rem; }
+      .subscribe-form input[type="email"] {
+        min-width: 0;
+        width: 100%;
+        height: 52px;
+        font-size: 1rem;
+        padding: 0 1rem;
+        border-width: 3px;
+      }
+      .subscribe-form button {
+        width: 100%;
+        height: 52px;
+        padding: 0 1rem;
+        font-size: 1rem;
+        border-width: 3px;
+        box-shadow: 4px 4px 0 var(--primary-dark);
+      }
+      .subscribe-form button:hover { transform: none; box-shadow: 4px 4px 0 var(--primary-dark); }
+    }
   </style>
 
   <section class="hero">
