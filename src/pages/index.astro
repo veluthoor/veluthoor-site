@@ -138,6 +138,8 @@ function validImage(url?: string) {
       border: 3px solid var(--black);
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      display: inline-block;
+      text-decoration: none !important;
     }
 
     .tag:hover {
@@ -490,14 +492,14 @@ function validImage(url?: string) {
       </p>
       <p>More about me <a href="/about">here</a> →</p>
       <div class="tags">
-        <span class="tag tag-primary">travel ✈️</span>
-        <span class="tag tag-primary-dark">running 🏃‍♀️</span>
+        <a href="/blog/itinery" class="tag tag-primary">travel ✈️</a>
+        <a href="/blog/running" class="tag tag-primary-dark">running 🏃‍♀️</a>
         <span class="tag tag-primary-light">food 🍜</span>
         <span class="tag tag-primary">life in bangalore 🌳</span>
         <span class="tag tag-accent">personal finance 💰</span>
-        <span class="tag tag-primary-dark">books 📚</span>
+        <a href="/pages/books" class="tag tag-primary-dark">books 📚</a>
         <span class="tag tag-primary-light">languages 🗣️</span>
-        <span class="tag tag-primary">vibe coding 💻</span>
+        <a href="https://github.com/veluthoor" target="_blank" rel="noreferrer" class="tag tag-primary">vibe coding 💻</a>
       </div>
     </div>
   </section>
