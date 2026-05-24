@@ -39,20 +39,26 @@ const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const limitArg = args.find(a => a.startsWith('--limit='));
 const LIMIT = limitArg ? parseInt(limitArg.split('=')[1], 10) : Infinity;
+// --test-to=addr sends ONE real email (the newest post) to a single address,
+// bypassing MailerLite and without recording state. For verifying the pipeline.
+const testArg = args.find(a => a.startsWith('--test-to='));
+const TEST_TO = testArg ? testArg.split('=')[1] : null;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function requireEnv(name) {
+function requireEnv(name, { optional = false } = {}) {
   const v = process.env[name];
-  if (!v && !DRY_RUN) {
+  if (!v && !DRY_RUN && !optional) {
     console.error(`Missing required env var: ${name}`);
     process.exit(1);
   }
   return v;
 }
 
+// In --test-to mode we send to a single address and never touch MailerLite,
+// so the MailerLite key isn't required.
 const RESEND_API_KEY = requireEnv('RESEND_API_KEY');
-const MAILERLITE_API_KEY = requireEnv('MAILERLITE_API_KEY');
+const MAILERLITE_API_KEY = requireEnv('MAILERLITE_API_KEY', { optional: !!TEST_TO });
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Charu <charu@veluthoor.com>';
 
 // ---- RSS parsing (no deps; the feed is well-formed RSS 2.0) ----
@@ -209,6 +215,23 @@ async function main() {
   if (!feedRes.ok) throw new Error(`Feed ${feedRes.status}`);
   const items = parseFeed(await feedRes.text());
   console.log(`Feed: ${items.length} posts`);
+
+  // --test-to: send the newest post to one address, no list, no state changes.
+  if (TEST_TO) {
+    const post = items[0]; // feed is newest-first
+    console.log(`Test send: "${post.title}" → ${TEST_TO}`);
+    const email = {
+      from: FROM_EMAIL,
+      to: TEST_TO,
+      subject: `[TEST] ${post.title}`,
+      html: buildHtml(post, { id: 'test', email: TEST_TO }),
+      text: buildText(post),
+    };
+    const result = await sendBatch([email]);
+    console.log('Resend response:', JSON.stringify(result));
+    console.log('Test send complete. State NOT modified.');
+    return;
+  }
 
   const state = await loadState();
   const sentSet = new Set(state.sent);
