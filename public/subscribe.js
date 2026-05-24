@@ -1,29 +1,31 @@
-// Progressive enhancement for MailerLite subscribe forms.
-// Without JS the form still POSTs (target=_blank) and works; with JS we submit
-// in the background and show an inline thank-you so the page never navigates
-// to MailerLite's raw {"success":true} response.
-//
-// Note: the MailerLite jsonp endpoint sends no CORS headers, so we use
-// mode:'no-cors' — the request goes through and the subscriber is added, but
-// the response is opaque (unreadable). We treat "no network error" as success,
-// which is the standard pattern for these endpoints.
+// Progressive enhancement for the subscribe forms.
+// Submits in the background to our own /api/subscribe Netlify function, which
+// adds the subscriber to MailerLite via the API (no double opt-in, since the
+// account's API double opt-in is off). Shows an inline thank-you so the page
+// never navigates away. If JS is unavailable the form still POSTs directly to
+// MailerLite as a fallback (just lands on their plain response page).
 (function () {
+  var ENDPOINT = '/api/subscribe';
+
   function enhance(form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const btn = form.querySelector('button[type="submit"]');
-      const emailInput = form.querySelector('input[type="email"]');
-      const original = btn ? btn.textContent : '';
+      var btn = form.querySelector('button[type="submit"]');
+      var emailInput = form.querySelector('input[type="email"]');
+      var email = emailInput ? emailInput.value.trim() : '';
+      var original = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
 
       try {
-        await fetch(form.action, {
+        var res = await fetch(ENDPOINT, {
           method: 'POST',
-          mode: 'no-cors',
-          body: new FormData(form),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email }),
         });
-        // Replace the form with a thank-you message, matching site tone.
-        const msg = document.createElement('p');
+        var data = await res.json().catch(function () { return {}; });
+        if (!res.ok || !data.success) throw new Error('subscribe failed');
+
+        var msg = document.createElement('p');
         msg.className = 'subscribe-thanks';
         msg.textContent = "You're in! Thanks for subscribing — see you in your inbox :)";
         msg.style.cssText = 'margin:0;font-weight:500;';

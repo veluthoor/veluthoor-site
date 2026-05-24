@@ -2,6 +2,15 @@
   command = "npm run build"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+
+# Clean path for the subscribe proxy. Must come BEFORE the catch-all below.
+[[redirects]]
+  from = "/api/subscribe"
+  to = "/.netlify/functions/subscribe"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/404"
