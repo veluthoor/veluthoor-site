@@ -245,8 +245,10 @@ function formatDate(dateStr?: string) {
 
     <div class="post-subscribe">
       <p>If you enjoyed this, consider subscribing — I write about life, travel, running, and whatever else is on my mind.</p>
-      <form class="post-subscribe-form" action="https://api.follow.it/subscription-form/UW55STg3OG5VbmpKMWRNZVB3ajA5SjR4KzdDaUU2WEhHbldyOFRWczBMd2VUeHRFb2FWdmpRK2tVdVNjUGVoVkl6VW5vYjlnYU4ySUNZZlF6Z29zMytva05aZWRWVkdMbndHMFdJVGovME9vOVhpUkF6RDl4SHNiN0FHMFU4dmx8ZFFyNTM5UmVmQ2RWOTNSRnludC9iRTk5cWV3RTN1UVl3TFE2V0RkcXNwQT0=/8" method="post">
-        <input type="email" name="email" required placeholder="your@email.com" />
+      <form class="post-subscribe-form" action="https://assets.mailerlite.com/jsonp/2373969/forms/188346464473187402/subscribe" method="post" target="_blank">
+        <input type="email" name="fields[email]" required placeholder="your@email.com" autocomplete="email" />
+        <input type="hidden" name="ml-submit" value="1" />
+        <input type="hidden" name="anticsrf" value="true" />
         <button type="submit">Subscribe</button>
       </form>
     </div>
