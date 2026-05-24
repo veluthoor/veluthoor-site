@@ -1,0 +1,62 @@
+name: Newsletter RSS-to-email
+
+# Checks the RSS feed on a schedule and emails any new posts to MailerLite
+# subscribers via Resend. State (which posts were already sent) is committed
+# back to the repo so the next run knows what's new.
+
+on:
+  schedule:
+    # Every day at 09:30 UTC (~3:00 PM IST). Posts are infrequent, so daily is plenty.
+    - cron: '30 9 * * *'
+  workflow_dispatch:
+    # Manual trigger from the Actions tab, with an optional dry run.
+    inputs:
+      dry_run:
+        description: 'Dry run (do not actually send)'
+        type: boolean
+        default: false
+
+# Allow the workflow to push the updated state.json back to the repo.
+permissions:
+  contents: write
+
+# Never run two sends at once.
+concurrency:
+  group: newsletter
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Send new posts
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MAILERLITE_API_KEY: ${{ secrets.MAILERLITE_API_KEY }}
+          FROM_EMAIL: ${{ vars.FROM_EMAIL || 'Charu <charu@veluthoor.com>' }}
+          UNSUBSCRIBE_URL: ${{ vars.UNSUBSCRIBE_URL }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            node newsletter/send.mjs --dry-run
+          else
+            node newsletter/send.mjs
+          fi
+
+      - name: Commit updated state
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          if [[ -n "$(git status --porcelain newsletter/state.json)" ]]; then
+            git config user.name  "newsletter-bot"
+            git config user.email "noreply@veluthoor.com"
+            git add newsletter/state.json
+            git commit -m "newsletter: record sent posts [skip ci]"
+            git push
+          else
+            echo "No state change to commit."
+          fi
