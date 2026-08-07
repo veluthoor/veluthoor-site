@@ -13,7 +13,8 @@ feature_image: ""
 <table>
 <thead><tr><th>Title</th><th>Author</th></tr></thead>
 <tbody>
-<tr><td><em>Masala Lab: The Science of Indian Cooking</em></td><td>Krish Ashok</td></tr>
+<tr><td><em>Crying in H Mart</em></td><td>Michelle Zauner</td></tr>
+<tr><td><em>The Culture Map: Breaking Through the Invisible Boundaries of Global Business</em></td><td>Erin Meyer</td></tr>
 </tbody>
 </table>
 
@@ -21,6 +22,8 @@ feature_image: ""
 <table>
 <thead><tr><th>Title</th><th>Author</th><th>Rating</th><th>Read</th><th>Notes</th></tr></thead>
 <tbody>
+<tr><td><em>Vagabonding: An Uncommon Guide to the Art of Long-Term World Travel</em></td><td>Rolf Potts</td><td>2.5</td><td>Aug 2026</td><td>A travel book written specifically for a white man from the first world, and one that's largely outdated for the current global travel landscape.</td></tr>
+<tr><td><em>Masala Lab: The Science of Indian Cooking</em></td><td>Krish Ashok</td><td>4</td><td>Aug 2026</td><td></td></tr>
 <tr><td><em>The Elephant, The Tiger, and the Cellphone</em></td><td>Shashi Tharoor</td><td>2.5</td><td>Apr 2026</td><td>Generally enjoy reading Dr. Tharoor's readings, but this is not a book — it's a lazy collection of previously published editorials that keep repeating the same stuff over and over and are completely irrelevant over time. Poorly titled; should've rather been called <em>Shashi Tharoor's opinions from the 2010s</em>, since most are too outdated.</td></tr>
 <tr><td><em>Unfolding: A Novel</em></td><td>Rahul Singh</td><td>3.5</td><td>Feb 2026</td><td></td></tr>
 <tr><td><em>Lucknow Boy: A Memoir</em></td><td>Vinod Mehta</td><td>4.25</td><td>Feb 2026</td><td>Absolutely loved Vinod Mehta's memoir. This was a book I picked up from my dad's shelf, and considering we have very different tastes in books for the most part, I was pleasantly surprised that I enjoyed it :)</td></tr>
