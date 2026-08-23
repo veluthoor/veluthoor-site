@@ -31,7 +31,13 @@ export async function GET(context) {
 
       // Lead with the feature image so it appears at the top of the email.
       if (post.data.feature_image) {
-        const img = `<img src="${siteOrigin}${post.data.feature_image}" alt="${post.data.title}" style="max-width:100%;height:auto;border-radius:4px;margin-bottom:1.5rem;" />`;
+        // feature_image may be root-relative (/images/foo.jpg) or an already
+        // absolute URL (Unsplash). Only prepend the origin for the former.
+        const src = /^https?:\/\//i.test(post.data.feature_image)
+          ? post.data.feature_image
+          : `${siteOrigin}${post.data.feature_image}`;
+        const alt = post.data.title.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        const img = `<img src="${src}" alt="${alt}" style="max-width:100%;height:auto;border-radius:4px;margin-bottom:1.5rem;" />`;
         content = img + content;
       }
 

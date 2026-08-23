@@ -6,8 +6,8 @@ name: Newsletter RSS-to-email
 
 on:
   schedule:
-    # Every day at 09:30 UTC (~3:00 PM IST). Posts are infrequent, so daily is plenty.
-    - cron: '30 9 * * *'
+    # Every day at 15:30 UTC (9:00 PM IST). Posts are infrequent, so daily is plenty.
+    - cron: '30 15 * * *'
   workflow_dispatch:
     # Manual trigger from the Actions tab, with an optional dry run.
     inputs:
