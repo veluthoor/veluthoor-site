@@ -13,7 +13,7 @@ feature_image: ""
 <table>
 <thead><tr><th>Title</th><th>Author</th></tr></thead>
 <tbody>
-<tr><td><em>Crying in H Mart</em></td><td>Michelle Zauner</td></tr>
+<tr><td><em>Talking to Strangers: What We Should Know About the People We Don't Know</em></td><td>Malcolm Gladwell</td></tr>
 <tr><td><em>The Culture Map: Breaking Through the Invisible Boundaries of Global Business</em></td><td>Erin Meyer</td></tr>
 </tbody>
 </table>
@@ -22,6 +22,7 @@ feature_image: ""
 <table>
 <thead><tr><th>Title</th><th>Author</th><th>Rating</th><th>Read</th><th>Notes</th></tr></thead>
 <tbody>
+<tr><td><em>Crying in H Mart</em></td><td>Michelle Zauner</td><td>4</td><td>Aug 2026</td><td></td></tr>
 <tr><td><em>Vagabonding: An Uncommon Guide to the Art of Long-Term World Travel</em></td><td>Rolf Potts</td><td>2.5</td><td>Aug 2026</td><td>A travel book written specifically for a white man from the first world, and one that's largely outdated for the current global travel landscape.</td></tr>
 <tr><td><em>Masala Lab: The Science of Indian Cooking</em></td><td>Krish Ashok</td><td>4</td><td>Aug 2026</td><td></td></tr>
 <tr><td><em>The Elephant, The Tiger, and the Cellphone</em></td><td>Shashi Tharoor</td><td>2.5</td><td>Apr 2026</td><td>Generally enjoy reading Dr. Tharoor's readings, but this is not a book — it's a lazy collection of previously published editorials that keep repeating the same stuff over and over and are completely irrelevant over time. Poorly titled; should've rather been called <em>Shashi Tharoor's opinions from the 2010s</em>, since most are too outdated.</td></tr>
@@ -31,7 +32,7 @@ feature_image: ""
 <tr><td><em>Weapons of Math Destruction</em></td><td>Cathy O'Neil</td><td>4.5</td><td>Feb 2026</td><td>Great read, though the author's perspective doesn't address the pros of WMD (or machine learning models) and how we can build better models that are more inclusive.</td></tr>
 <tr><td><em>The Authenticity Project</em></td><td>Clare Pooley</td><td>4</td><td>Feb 2026</td><td></td></tr>
 <tr><td><em>Stamford Hospital</em></td><td>Thammika Songkaeo</td><td>3</td><td>Jan 2026</td><td></td></tr>
-<tr><td><em>Butter</em></td><td>Asako Yuzuki</td><td>4</td><td>Nov 2025</td><td>Kajimana really takes you on a ride over the course of this book. You'll find yourself questioning your own moral compass, feeling absurd cravings for the food she describes, and cooking like you've never done before :)</td></tr>
+<tr><td><em>Butter</em></td><td>Asako Yuzuki</td><td>4.5</td><td>Nov 2025</td><td>Kajimana really takes you on a ride over the course of this book. You'll find yourself questioning your own moral compass, feeling absurd cravings for the food she describes, and cooking like you've never done before :)</td></tr>
 <tr><td><em>Mother Mary Comes to Me</em></td><td>Arundhati Roy</td><td>5</td><td>Sep 2025</td><td>Easily the best book I've read this year! A reminder that love in all forms is as complicated as it gets :)</td></tr>
 <tr><td><em>The Other Side of Silence: Voices from the Partition of India</em></td><td>Urvashi Butalia</td><td>4</td><td>Sep 2025</td><td></td></tr>
 <tr><td><em>Everyone in This Room Will Someday Be Dead</em></td><td>Emily R. Austin</td><td>4</td><td>Jul 2025</td><td></td></tr>
