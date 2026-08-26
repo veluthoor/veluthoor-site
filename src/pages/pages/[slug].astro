@@ -20,7 +20,7 @@ function formatDate(dateStr?: string) {
 }
 ---
 
-<Layout title={page.data.title} description={page.data.excerpt}>
+<Layout title={page.data.title} description={page.data.excerpt} noindex={page.data.unlisted}>
   <style>
     .page-header {
       margin-bottom: 2.5rem;

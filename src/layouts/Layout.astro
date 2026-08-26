@@ -4,9 +4,10 @@ import Decorations from '../components/Decorations.astro';
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
-const { title = 'Charu Veluthoor', description = 'Personal blog by Charu Veluthoor' } = Astro.props;
+const { title = 'Charu Veluthoor', description = 'Personal blog by Charu Veluthoor', noindex = false } = Astro.props;
 const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Veluthoor`;
 ---
 
@@ -16,6 +17,7 @@ const siteTitle = title === 'Charu Veluthoor' ? title : `${title} — Charu Velu
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" href="/avatar.jpg" type="image/jpeg" />
     <link rel="alternate" type="application/rss+xml" title="Charu Veluthoor" href="/rss.xml" />
     <title>{siteTitle}</title>

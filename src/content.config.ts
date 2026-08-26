@@ -22,6 +22,9 @@ const pages = defineCollection({
     status: z.string().optional(),
     excerpt: z.string().optional(),
     feature_image: z.string().optional(),
+    // Unlisted pages still build at their URL but are hidden from /writing
+    // and told not to be indexed by search engines.
+    unlisted: z.boolean().optional(),
   }),
 });
 
