@@ -3,3 +3,6 @@ dist/
 .astro/
 .env
 .DS_Store
+
+# Subscriber exports are personal data; never commit them (repo is public).
+*.csv

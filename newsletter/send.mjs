@@ -5,16 +5,21 @@
  * Flow:
  *   1. Fetch the RSS feed and parse items (title, link, guid, pubDate, content:encoded).
  *   2. Read state.json to find which post links were already sent.
- *   3. Pull the CURRENT active subscriber list from MailerLite (so anyone who
- *      unsubscribed there is automatically excluded — single source of truth).
+ *   3. Pull the CURRENT active subscriber list from our own list at
+ *      /api/subscribers (Netlify function + Netlify Blobs). Anyone who
+ *      unsubscribed is excluded, and each subscriber comes with their own
+ *      signed unsubscribe link.
  *   4. For each new post, send a full-content email via Resend, one personalized
  *      message per subscriber (own unsubscribe link, no shared To: list).
  *   5. Record sent post links back into state.json.
  *
  * Env vars (required):
- *   RESEND_API_KEY      Resend API key (re_...)
- *   MAILERLITE_API_KEY  MailerLite API token
- *   FROM_EMAIL          e.g. "Charu <charu@veluthoor.com>"
+ *   RESEND_API_KEY          Resend API key (re_...)
+ *   NEWSLETTER_ADMIN_TOKEN  same value as the Netlify env var; lets us read the list
+ *   FROM_EMAIL              e.g. "Charu <charu@veluthoor.com>"
+ *
+ * Optional:
+ *   SUBSCRIBERS_URL     defaults to https://veluthoor.com/api/subscribers
  *
  * Flags:
  *   --dry-run   Do everything except actually send; print what would happen.
@@ -30,7 +35,7 @@ const STATE_PATH = join(__dirname, 'state.json');
 
 const FEED_URL = 'https://veluthoor.com/rss.xml';
 const SITE_URL = 'https://veluthoor.com';
-const MAILERLITE_BASE = 'https://connect.mailerlite.com/api';
+const SUBSCRIBERS_URL = process.env.SUBSCRIBERS_URL || `${SITE_URL}/api/subscribers`;
 const RESEND_BATCH_URL = 'https://api.resend.com/emails/batch';
 const RESEND_BATCH_SIZE = 100; // Resend: max 100 emails per batch call
 const RATE_DELAY_MS = 600;     // pace batch calls (Resend default ~2 req/s)
@@ -40,7 +45,7 @@ const DRY_RUN = args.includes('--dry-run');
 const limitArg = args.find(a => a.startsWith('--limit='));
 const LIMIT = limitArg ? parseInt(limitArg.split('=')[1], 10) : Infinity;
 // --test-to=addr sends ONE real email (the newest post) to a single address,
-// bypassing MailerLite and without recording state. For verifying the pipeline.
+// bypassing the subscriber list and without recording state. For verifying the pipeline.
 const testArg = args.find(a => a.startsWith('--test-to='));
 const TEST_TO = testArg ? testArg.split('=')[1] : null;
 
@@ -55,10 +60,10 @@ function requireEnv(name, { optional = false } = {}) {
   return v;
 }
 
-// In --test-to mode we send to a single address and never touch MailerLite,
-// so the MailerLite key isn't required.
+// In --test-to mode we send to a single address and never read the list,
+// so the admin token isn't required.
 const RESEND_API_KEY = requireEnv('RESEND_API_KEY');
-const MAILERLITE_API_KEY = requireEnv('MAILERLITE_API_KEY', { optional: !!TEST_TO });
+const NEWSLETTER_ADMIN_TOKEN = requireEnv('NEWSLETTER_ADMIN_TOKEN', { optional: !!TEST_TO });
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Charu <charu@veluthoor.com>';
 
 // ---- RSS parsing (no deps; the feed is well-formed RSS 2.0) ----
@@ -103,46 +108,25 @@ function parseFeed(xml) {
   return items;
 }
 
-// ---- MailerLite: pull current active subscribers ----
+// ---- Subscriber list: pull current active subscribers ----
 
 async function fetchActiveSubscribers() {
-  const subs = [];
-  let cursor = null;
-  do {
-    const url = new URL(`${MAILERLITE_BASE}/subscribers`);
-    url.searchParams.set('filter[status]', 'active');
-    url.searchParams.set('limit', '100');
-    if (cursor) url.searchParams.set('cursor', cursor);
-
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${MAILERLITE_API_KEY}`,
-        Accept: 'application/json',
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`MailerLite ${res.status}: ${await res.text()}`);
-    }
-    const json = await res.json();
-    for (const s of json.data || []) {
-      if (s.email && s.status === 'active') {
-        subs.push({ id: s.id, email: s.email });
-      }
-    }
-    cursor = json.meta?.next_cursor || null;
-  } while (cursor);
-  return subs;
+  const res = await fetch(SUBSCRIBERS_URL, {
+    headers: { Authorization: `Bearer ${NEWSLETTER_ADMIN_TOKEN}`, Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Subscriber list ${res.status}: ${await res.text()}`);
+  }
+  const json = await res.json();
+  return (json.subscribers || []).filter(s => s.email && s.unsubscribeUrl);
 }
 
 // ---- Email construction ----
 
 function buildHtml(post, subscriber) {
-  // MailerLite hosts an unsubscribe page per subscriber; the universal
-  // account-level unsubscribe page works without per-user tokens, but we also
-  // expose the MailerLite-hosted preference URL pattern. Falls back to mailto.
-  const unsubUrl =
-    process.env.UNSUBSCRIBE_URL ||
-    `${SITE_URL}/unsubscribe?email=${encodeURIComponent(subscriber.email)}`;
+  // Each subscriber's own signed link from the list endpoint. Test sends have
+  // none, so they point at the site instead.
+  const unsubUrl = subscriber.unsubscribeUrl || SITE_URL;
 
   return `<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -247,18 +231,18 @@ async function main() {
   console.log(`New posts to send: ${unsent.length}`);
   unsent.forEach(p => console.log(`  • ${p.title}`));
 
-  const subscribers = DRY_RUN
-    ? [{ id: 'dry', email: 'dry-run@example.com' }]
+  // A dry run still reads the real list when the admin token is set (reading
+  // is harmless), so a dry run from GitHub Actions checks the whole setup.
+  const subscribers = DRY_RUN && !NEWSLETTER_ADMIN_TOKEN
+    ? [{ email: 'dry-run@example.com', unsubscribeUrl: `${SITE_URL}/api/unsubscribe?id=dry` }]
     : await fetchActiveSubscribers();
   console.log(`Active subscribers: ${subscribers.length}`);
 
   if (subscribers.length === 0) {
-    console.log('No active subscribers; marking posts as sent anyway to avoid backlog.');
-    if (!DRY_RUN) {
-      unsent.forEach(p => sentSet.add(p.guid));
-      await saveState({ sent: [...sentSet] });
-    }
-    return;
+    // An empty list almost certainly means something is wrong (list not yet
+    // imported, endpoint misconfigured). Fail loudly and leave the posts unsent
+    // so the next run can deliver them.
+    throw new Error('Subscriber list is empty; not sending and not marking posts as sent.');
   }
 
   for (const post of unsent) {
@@ -268,6 +252,11 @@ async function main() {
       subject: post.title,
       html: buildHtml(post, sub),
       text: buildText(post),
+      // Lets Gmail / Apple Mail show their own one-click "Unsubscribe" button.
+      headers: {
+        'List-Unsubscribe': `<${sub.unsubscribeUrl}>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
     }));
 
     if (DRY_RUN) {

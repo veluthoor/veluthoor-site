@@ -507,10 +507,9 @@ function validImage(url?: string) {
   <section class="subscribe-section animate-on-scroll">
     <h3>Join the Newsletter</h3>
     <p>Would love to have you here! Get my posts straight to your inbox. It'd mean the world if you'd subscribe :)</p>
-    <form class="subscribe-form" action="https://assets.mailerlite.com/jsonp/2373969/forms/188346464473187402/subscribe" method="post" target="_blank">
-      <input type="email" name="fields[email]" required placeholder="you@example.com" autocomplete="email" />
-      <input type="hidden" name="ml-submit" value="1" />
-      <input type="hidden" name="anticsrf" value="true" />
+    <form class="subscribe-form" action="/api/subscribe" method="post">
+      <input type="email" name="email" required placeholder="you@example.com" autocomplete="email" />
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       <button type="submit">Subscribe Now</button>
     </form>
   </section>
