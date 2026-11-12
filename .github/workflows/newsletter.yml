@@ -1,7 +1,8 @@
 name: Newsletter RSS-to-email
 
-# Checks the RSS feed on a schedule and emails any new posts to MailerLite
-# subscribers via Resend. State (which posts were already sent) is committed
+# Checks the RSS feed on a schedule and emails any new posts to the
+# self-hosted subscriber list (veluthoor.com/api/subscribers) via Resend.
+# State (which posts were already sent) is committed
 # back to the repo so the next run knows what's new.
 
 on:
@@ -38,9 +39,8 @@ jobs:
       - name: Send new posts
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          MAILERLITE_API_KEY: ${{ secrets.MAILERLITE_API_KEY }}
+          NEWSLETTER_ADMIN_TOKEN: ${{ secrets.NEWSLETTER_ADMIN_TOKEN }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL || 'Charu <charu@veluthoor.com>' }}
-          UNSUBSCRIBE_URL: ${{ vars.UNSUBSCRIBE_URL }}
         run: |
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             node newsletter/send.mjs --dry-run

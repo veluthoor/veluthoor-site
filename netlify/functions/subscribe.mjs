@@ -1,68 +1,93 @@
-// Server-side subscribe proxy. The site form posts an email here; this calls
-// MailerLite's API with the secret key (never exposed to the browser). With the
-// account's "Double opt-in for API and integrations" turned OFF, subscribers
-// are added as active immediately — no confirmation email.
+// Newsletter signup with double opt-in.
 //
-// Env var (set in Netlify dashboard → Site settings → Environment variables):
-//   MAILERLITE_API_KEY
-// Optional:
-//   MAILERLITE_GROUP_ID  — if set, new subscribers are added to this group.
+// The site form posts an email here (JSON from subscribe.js, or a plain form
+// POST when JS is off). We store the subscriber as "pending" in our own Netlify
+// Blobs list and email them a confirmation link. They only start receiving
+// posts once they click it (see confirm.mjs).
+//
+// Spam protection: a hidden "website" field that people never fill but bots do,
+// and at most one confirmation email per address every 10 minutes.
 
-const ML_URL = 'https://connect.mailerlite.com/api/subscribers';
+import { normalizeEmail, idFor, getRecord, putRecord, linkFor, sendEmail, page } from '../lib/newsletter.mjs';
+
+const RESEND_COOLDOWN_MS = 10 * 60 * 1000;
+
+function confirmationEmail(link) {
+  return {
+    subject: 'Confirm your subscription to Charu Veluthoor',
+    html: `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#1a1a1a;font-size:16px;line-height:1.6">
+<p>Hi!</p>
+<p>Thanks for signing up to get my posts in your inbox. Just one click to confirm it was you:</p>
+<p style="margin:28px 0"><a href="${link}" style="background:#FF0000;color:#fff;font-weight:700;text-decoration:none;padding:12px 20px;border:3px solid #000">Yes, subscribe me</a></p>
+<p>If you didn't sign up, ignore this email and you won't hear from me.</p>
+<p>— Charu</p>
+</div>`,
+    text: `Thanks for signing up to get my posts in your inbox.\n\nConfirm your subscription: ${link}\n\nIf you didn't sign up, ignore this email and you won't hear from me.\n\n— Charu`,
+  };
+}
 
 export default async (request) => {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
 
-  let email;
+  const isJson = (request.headers.get('content-type') || '').includes('application/json');
+  const reply = (ok, status = 200, error) =>
+    isJson
+      ? Response.json(ok ? { success: true } : { success: false, error }, { status })
+      : ok
+        ? page('Almost there!', '<p>Check your inbox for a confirmation link. Once you click it, you\'re subscribed.</p>')
+        : page('Something went wrong', '<p>Please go back and try again, or email <a href="mailto:charu@veluthoor.com">charu@veluthoor.com</a>.</p>', status);
+
+  let raw, honeypot;
   try {
-    const ct = request.headers.get('content-type') || '';
-    if (ct.includes('application/json')) {
-      ({ email } = await request.json());
+    if (isJson) {
+      ({ email: raw, website: honeypot } = await request.json());
     } else {
       const form = await request.formData();
-      // accept either "email" or MailerLite-style "fields[email]"
-      email = form.get('email') || form.get('fields[email]');
+      raw = form.get('email') || form.get('fields[email]');
+      honeypot = form.get('website');
     }
   } catch {
-    email = null;
+    raw = null;
   }
 
-  email = (email || '').toString().trim().toLowerCase();
-  // minimal sanity check
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return Response.json({ success: false, error: 'invalid email' }, { status: 400 });
+  // Bots fill every field. Pretend it worked so they don't adapt.
+  if (honeypot) return reply(true);
+
+  const email = normalizeEmail(raw);
+  if (!email) return reply(false, 400, 'invalid email');
+
+  const id = idFor(email);
+  const now = new Date();
+  const existing = await getRecord(id);
+
+  // Already subscribed: say yes, send nothing.
+  if (existing?.status === 'active') return reply(true);
+
+  // Pending and we emailed them very recently: don't send another.
+  if (
+    existing?.status === 'pending' &&
+    existing.confirmSentAt &&
+    now - new Date(existing.confirmSentAt) < RESEND_COOLDOWN_MS
+  ) {
+    return reply(true);
   }
 
-  const key = process.env.MAILERLITE_API_KEY;
-  if (!key) {
-    return Response.json({ success: false, error: 'not configured' }, { status: 500 });
+  const record = {
+    email,
+    status: 'pending',
+    source: existing?.source || 'form',
+    createdAt: existing?.createdAt || now.toISOString(),
+    confirmSentAt: now.toISOString(),
+  };
+
+  try {
+    await sendEmail({ to: email, ...confirmationEmail(linkFor(new URL(request.url).origin, 'confirm', id)) });
+  } catch (err) {
+    console.error('confirmation email failed', err);
+    return reply(false, 502, 'email_failed');
   }
-
-  const body = { email };
-  if (process.env.MAILERLITE_GROUP_ID) {
-    body.groups = [process.env.MAILERLITE_GROUP_ID];
-  }
-
-  const res = await fetch(ML_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-
-  // 201 = created, 200 = already existed (upsert). Both are "subscribed".
-  if (res.ok) {
-    return Response.json({ success: true });
-  }
-
-  const detail = await res.text();
-  return Response.json(
-    { success: false, error: 'mailerlite_error', detail },
-    { status: 502 }
-  );
+  await putRecord(record);
+  return reply(true);
 };

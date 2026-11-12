@@ -4,11 +4,28 @@
 
 [functions]
   directory = "netlify/functions"
+  # esbuild bundles the shared helpers in netlify/lib and @netlify/blobs.
+  node_bundler = "esbuild"
 
-# Clean path for the subscribe proxy. Must come BEFORE the catch-all below.
+# Clean paths for the newsletter functions. Must come BEFORE the catch-all below.
 [[redirects]]
   from = "/api/subscribe"
   to = "/.netlify/functions/subscribe"
+  status = 200
+
+[[redirects]]
+  from = "/api/confirm"
+  to = "/.netlify/functions/confirm"
+  status = 200
+
+[[redirects]]
+  from = "/api/unsubscribe"
+  to = "/.netlify/functions/unsubscribe"
+  status = 200
+
+[[redirects]]
+  from = "/api/subscribers"
+  to = "/.netlify/functions/subscribers"
   status = 200
 
 [[redirects]]
