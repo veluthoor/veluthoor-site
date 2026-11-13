@@ -1,6 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+// Public Cloudflare Turnstile site key (safe to expose). The secret key lives
+// only in Netlify as TURNSTILE_SECRET_KEY. If unset, no widget is shown and
+// signup falls back to the confirmation email.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -250,8 +254,10 @@ function formatDate(dateStr?: string) {
         <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
         <button type="submit">Subscribe</button>
       </form>
+      {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-appearance="interaction-only" style="margin-top:0.75rem"></div>}
     </div>
   </article>
 
+  {turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   <script src="/subscribe.js" is:inline></script>
 </Layout>

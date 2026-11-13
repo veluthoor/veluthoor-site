@@ -1,16 +1,26 @@
-// Newsletter signup with double opt-in.
+// Newsletter signup.
 //
 // The site form posts an email here (JSON from subscribe.js, or a plain form
-// POST when JS is off). We store the subscriber as "pending" in our own Netlify
-// Blobs list and email them a confirmation link. They only start receiving
-// posts once they click it (see confirm.mjs).
+// POST when JS is off). Two modes, picked by configuration:
 //
-// Spam protection: a hidden "website" field that people never fill but bots do,
-// and at most one confirmation email per address every 10 minutes.
+// 1. Cloudflare Turnstile (when TURNSTILE_SECRET_KEY is set): the browser runs
+//    Cloudflare's bot check and sends us a one-time token. We verify it with
+//    Cloudflare using the secret key (which never leaves the server) and, if
+//    it passes, add the subscriber as active immediately. No email to click.
+//
+// 2. Double opt-in (fallback when Turnstile isn't configured): we store the
+//    subscriber as "pending" and email a confirmation link (see confirm.mjs).
+//
+// Both modes also have a hidden "website" field that people never fill but
+// bots do.
+//
+// Env vars: TURNSTILE_SECRET_KEY (optional, enables mode 1). The matching
+// public site key is PUBLIC_TURNSTILE_SITE_KEY, used at build time by the pages.
 
 import { normalizeEmail, idFor, getRecord, putRecord, linkFor, sendEmail, page } from '../lib/newsletter.mjs';
 
 const RESEND_COOLDOWN_MS = 10 * 60 * 1000;
+const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 function confirmationEmail(link) {
   return {
@@ -26,44 +36,93 @@ function confirmationEmail(link) {
   };
 }
 
+async function passesTurnstile(token, ip) {
+  if (!token) return false;
+  const body = new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY, response: token });
+  if (ip) body.set('remoteip', ip);
+  try {
+    const res = await fetch(SITEVERIFY_URL, { method: 'POST', body });
+    const data = await res.json();
+    if (!data.success) console.warn('turnstile rejected', data['error-codes']);
+    return data.success === true;
+  } catch (err) {
+    console.error('turnstile verify failed', err);
+    return false;
+  }
+}
+
 export default async (request) => {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
 
+  const turnstileOn = !!process.env.TURNSTILE_SECRET_KEY;
   const isJson = (request.headers.get('content-type') || '').includes('application/json');
-  const reply = (ok, status = 200, error) =>
-    isJson
-      ? Response.json(ok ? { success: true } : { success: false, error }, { status })
-      : ok
-        ? page('Almost there!', '<p>Check your inbox for a confirmation link. Once you click it, you\'re subscribed.</p>')
-        : page('Something went wrong', '<p>Please go back and try again, or email <a href="mailto:charu@veluthoor.com">charu@veluthoor.com</a>.</p>', status);
 
-  let raw, honeypot;
+  // ok: success; pending: true when they still need to click a confirm email.
+  const reply = ({ ok, pending = false, status = 200, error }) => {
+    if (isJson) {
+      return Response.json(ok ? { success: true, pending } : { success: false, error }, { status });
+    }
+    if (ok && pending) {
+      return page('Almost there!', '<p>Check your inbox for a confirmation link. Once you click it, you\'re subscribed.</p>');
+    }
+    if (ok) {
+      return page('You\'re in!', '<p>Thanks for subscribing — new posts will land straight in your inbox :)</p>');
+    }
+    const msg = error === 'verification_failed'
+      ? '<p>We couldn\'t check you\'re not a bot. Please go back and try again with JavaScript turned on, or email <a href="mailto:charu@veluthoor.com">charu@veluthoor.com</a>.</p>'
+      : '<p>Please go back and try again, or email <a href="mailto:charu@veluthoor.com">charu@veluthoor.com</a>.</p>';
+    return page('Something went wrong', msg, status);
+  };
+
+  let raw, honeypot, token;
   try {
     if (isJson) {
-      ({ email: raw, website: honeypot } = await request.json());
+      ({ email: raw, website: honeypot, token } = await request.json());
     } else {
       const form = await request.formData();
       raw = form.get('email') || form.get('fields[email]');
       honeypot = form.get('website');
+      token = form.get('cf-turnstile-response');
     }
   } catch {
     raw = null;
   }
 
   // Bots fill every field. Pretend it worked so they don't adapt.
-  if (honeypot) return reply(true);
+  if (honeypot) return reply({ ok: true, pending: !turnstileOn });
 
   const email = normalizeEmail(raw);
-  if (!email) return reply(false, 400, 'invalid email');
+  if (!email) return reply({ ok: false, status: 400, error: 'invalid email' });
 
   const id = idFor(email);
   const now = new Date();
+
+  // ---- Mode 1: Turnstile, instant signup ----
+  if (turnstileOn) {
+    const ip = request.headers.get('x-nf-client-connection-ip') || undefined;
+    if (!(await passesTurnstile(token, ip))) {
+      return reply({ ok: false, status: 400, error: 'verification_failed' });
+    }
+    const existing = await getRecord(id);
+    if (existing?.status !== 'active') {
+      await putRecord({
+        email,
+        status: 'active',
+        source: existing?.source || 'form',
+        createdAt: existing?.createdAt || now.toISOString(),
+        confirmedAt: now.toISOString(),
+      });
+    }
+    return reply({ ok: true });
+  }
+
+  // ---- Mode 2: double opt-in ----
   const existing = await getRecord(id);
 
   // Already subscribed: say yes, send nothing.
-  if (existing?.status === 'active') return reply(true);
+  if (existing?.status === 'active') return reply({ ok: true });
 
   // Pending and we emailed them very recently: don't send another.
   if (
@@ -71,23 +130,21 @@ export default async (request) => {
     existing.confirmSentAt &&
     now - new Date(existing.confirmSentAt) < RESEND_COOLDOWN_MS
   ) {
-    return reply(true);
+    return reply({ ok: true, pending: true });
   }
-
-  const record = {
-    email,
-    status: 'pending',
-    source: existing?.source || 'form',
-    createdAt: existing?.createdAt || now.toISOString(),
-    confirmSentAt: now.toISOString(),
-  };
 
   try {
     await sendEmail({ to: email, ...confirmationEmail(linkFor(new URL(request.url).origin, 'confirm', id)) });
   } catch (err) {
     console.error('confirmation email failed', err);
-    return reply(false, 502, 'email_failed');
+    return reply({ ok: false, status: 502, error: 'email_failed' });
   }
-  await putRecord(record);
-  return reply(true);
+  await putRecord({
+    email,
+    status: 'pending',
+    source: existing?.source || 'form',
+    createdAt: existing?.createdAt || now.toISOString(),
+    confirmSentAt: now.toISOString(),
+  });
+  return reply({ ok: true, pending: true });
 };

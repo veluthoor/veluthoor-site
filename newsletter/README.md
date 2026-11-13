@@ -8,10 +8,16 @@ subscriber list is ours: no MailerLite, no signup limits.
 - **List:** Netlify Blobs (free, built into Netlify), one record per subscriber,
   keyed by a hash of their email. Managed by Netlify functions in
   `netlify/functions/`, with shared code in `netlify/lib/newsletter.mjs`:
-  - `POST /api/subscribe` — the site's signup form. Saves the person as
-    *pending* and emails them a confirmation link (double opt-in). Has a hidden
-    bot-trap field and sends at most one confirmation per address per 10 min.
-  - `GET /api/confirm` — the confirmation link. Makes them *active*.
+  - `POST /api/subscribe` — the site's signup form. Two modes:
+    - **Cloudflare Turnstile (when configured):** the browser runs Cloudflare's
+      mostly-invisible bot check and sends a one-time token; the function verifies
+      it with Cloudflare using the secret key and subscribes the person
+      **instantly**, no email to click.
+    - **Double opt-in (fallback when Turnstile isn't configured):** saves them
+      as *pending* and emails a confirmation link, at most one per address per
+      10 min.
+    Both modes also have a hidden bot-trap field.
+  - `GET /api/confirm` — the confirmation link (double opt-in mode). Makes them *active*.
   - `/api/unsubscribe` — the link in every newsletter. Opening it shows an
     "Unsubscribe" button (so email security scanners that open links can't
     unsubscribe people by accident); the button, and the one-click unsubscribe
@@ -51,6 +57,17 @@ Netlify → Site configuration → Environment variables:
 - `NEWSLETTER_ADMIN_TOKEN`
 - `RESEND_API_KEY` (same `re_...` key as in GitHub)
 - `FROM_EMAIL` (optional, defaults to `Charu <charu@veluthoor.com>`)
+
+### 2b. Cloudflare Turnstile (instant signup, recommended)
+1. Cloudflare dashboard → **Turnstile** → **Add widget**. Hostnames:
+   `veluthoor.com` (add the Netlify preview domain too if you test previews).
+   Widget mode: **Managed**.
+2. Copy the two keys it shows into Netlify environment variables:
+   - `PUBLIC_TURNSTILE_SITE_KEY` = the **site key** (public, ends up in the page;
+     scope must include **Builds**)
+   - `TURNSTILE_SECRET_KEY` = the **secret key** (scope must include **Functions**)
+3. Redeploy. The forms then show Cloudflare's check (usually invisible) and
+   signups become instant. Remove the two variables to go back to double opt-in.
 
 ### 3. GitHub secret
 `veluthoor-site` repo → Settings → Secrets and variables → Actions → Secrets:
